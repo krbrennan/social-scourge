@@ -1,15 +1,6 @@
 const functions = require('firebase-functions');
 
-const config = {
-    apiKey: "AIzaSyDBgARBXtewBiPTLYQDytvP_iNeo76vEO0",
-    authDomain: "social-scourge.firebaseapp.com",
-    databaseURL: "https://social-scourge.firebaseio.com",
-    projectId: "social-scourge",
-    storageBucket: "social-scourge.appspot.com",
-    messagingSenderId: "444991870869",
-    appId: "1:444991870869:web:cf2ff6edfa7c1e25cb089c",
-    measurementId: "G-JDFQE5846E"
-};
+const config = require('./key/config.js');
 
 const firebase = require('firebase');
 firebase.initializeApp(config);

@@ -1,3 +1,4 @@
 node_modules/
 
 key/admin.json
+key/config.js
