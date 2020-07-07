@@ -3,11 +3,10 @@ const functions = require('firebase-functions');
 // import modules
 const config = require('./key/config.js');
 const { getAllPosts, newPost } = require('./handlers/posts');
-const { signup, signin } = require('./handlers/users')
+const { signup, signin, signout, uploadImg, getProfile, addUserDetails } = require('./handlers/users');
 const { admin, db } = require('./util/admin.js');
 
 const firebase = require('firebase');
-// firebase.initializeApp(config);
 const app = require('express')();
 
 const serviceAccount = require("./key/admin.json");
@@ -17,10 +16,14 @@ const { FBAuth } = require('./util/auth');
 
 // POST routes
 app.get('/posts', getAllPosts);
-app.post('/post', FBAuth, newPost)
+app.post('/post', FBAuth, newPost);
 
-// signup route
+// user route
 app.post('/signup', signup);
-app.post('/signin', signin)
+app.post('/signin', signin);
+app.post('/signout', signout);
+app.post('/user/photo', FBAuth, uploadImg);
+app.get('/user/profile', FBAuth, getProfile);
+app.post('/user', FBAuth, addUserDetails);
 
 exports.api = functions.https.onRequest(app);

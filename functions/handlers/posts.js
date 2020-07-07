@@ -1,4 +1,6 @@
-const { db } = require('../util/admin');
+const { db} = require('../util/admin');
+
+firebase = require('firebase');
 
 exports.getAllPosts = (req, res) => {
     db.collection('posts')
@@ -20,7 +22,11 @@ exports.getAllPosts = (req, res) => {
         console.error(err)
     })
 }
-
+// 
+// 
+// 
+// 
+// 
 exports.newPost = (req, res) => {
     const newPost = {
         content: req.body.content,

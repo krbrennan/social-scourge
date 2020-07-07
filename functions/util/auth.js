@@ -26,7 +26,10 @@ exports.FBAuth = ((req, res, next) => {
             req.user.username = data.docs[0].data().username
             next()
         })
-        .catch(function(err) {
-            res.status(403).json(err)
+        .catch((err) => {
+            if(err.code){
+                res.status(403).json({ error: "You must be signed in to do that."})
+            }
+            res.status(403).json(err.code)
         })
 })
