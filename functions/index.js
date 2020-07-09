@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 
 // import modules
 const config = require('./key/config.js');
-const { getAllPosts, newPost } = require('./handlers/posts');
+const { getAllPosts, newPost, getPost, deletePost, likePost, commentOnPost } = require('./handlers/posts');
 const { signup, signin, signout, uploadImg, getProfile, addUserDetails } = require('./handlers/users');
 const { admin, db } = require('./util/admin.js');
 
@@ -16,7 +16,20 @@ const { FBAuth } = require('./util/auth');
 
 // POST routes
 app.get('/posts', getAllPosts);
+app.get('/post/:postId', getPost);
 app.post('/post', FBAuth, newPost);
+// delete post
+app.delete('/post/:postId',FBAuth, deletePost);
+// like post
+app.post('/post/:postId', FBAuth, likePost);
+// comment on post
+app.post('/post/:postId/comment', FBAuth, commentOnPost);
+
+// TODO
+
+
+// unlike post
+// comment on post
 
 // user route
 app.post('/signup', signup);

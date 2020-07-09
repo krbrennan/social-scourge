@@ -153,7 +153,7 @@ exports.addUserDetails = (req, res) => {
     db
     .collection('users')
     .doc(username)
-     .update(userInfo)
+    .update(userInfo)
     .then((data) => {
         res.status(200).json({message: data})
     })

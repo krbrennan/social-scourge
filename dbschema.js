@@ -19,12 +19,31 @@ let db = {
         {
           username:   'user',
           content: 'post content',
-          created: '2020-07-01!5:33:00.018Z',
+          createdAt: '2020-07-01!5:33:00.018Z',
           likeCount: 2,
           commentCount: 1
         }
+    ],
+    comments: [
+      {
+        username: 'user',
+        postId: "ksd8sjdjjj2",
+        body: "Rome is burning",
+        createdAt: '2019-03-15T10:59:52.798Z'
+      }
+    ],
+    likes: [
+      {
+        list: [
+          "user1",
+          "user2",
+          "user3"
+        ],
+        username: 'user0',
+        postId = '9JN4I3N2BB3IN'
+      }
     ]
-}
+};
 
 const userDetails = {
   // Redux data

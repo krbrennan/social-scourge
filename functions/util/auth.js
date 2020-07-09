@@ -14,7 +14,6 @@ exports.FBAuth = ((req, res, next) => {
     admin.auth().verifyIdToken(idToken)
         .then(function(decodedToken) {
             // decodedToken contains user data
-            // console.log(decodedToken)
             req.user = decodedToken;
             return db.collection("users")
                 .where('userId', "==", req.user.uid)
