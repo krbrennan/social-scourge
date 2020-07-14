@@ -17,15 +17,18 @@ const { FBAuth } = require('./util/auth');
 // POST routes
 app.get('/posts', getAllPosts);
 app.get('/post/:postId', getPost);
+// Create new post
 app.post('/post', FBAuth, newPost);
 // delete post
 app.delete('/post/:postId',FBAuth, deletePost);
-// like post
-app.post('/post/:postId', FBAuth, likePost);
+
 // comment on post
 app.post('/post/:postId/comment', FBAuth, commentOnPost);
 
 // TODO
+// like post (not done)
+app.post('/post/:postId/like', FBAuth, likePost);
+// unlike post
 
 
 // unlike post

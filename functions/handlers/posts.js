@@ -30,17 +30,22 @@ exports.getAllPosts = (req, res) => {
 // 
 exports.newPost = (req, res) => {
     const newPost = {
-        content: req.body.content,
-        username: req.body.username,
+        body: req.body.body,
+        username: req.user.username,
         createdAt: new Date().toISOString(),
         likeCount: req.body.likeCount,
-        commentCount: req.body.commentCount
+        commentCount: req.body.commentCount,
+        imageUrl: req.user.imageUrl,
+        likeCount: 0,
+        commentCount:0
     }
 
     db
     .collection('posts')
     .add(newPost)
     .then((doc) => {
+        const responsePost = newPost;
+        responsePost.postId = doc.id;
         res.json({message: `document ${doc.id} created successfully`})
     })
     .catch((err) => {
@@ -78,12 +83,13 @@ exports.getPost = (req, res) => {
             postInfo = data.data();
             postInfo.postId = data.id;
             // now get relevant comments
-            return db.collection('comments').where('postId', '==', req.params.postId).get()
+           return db.collection('comments').where('comment.postId', '==', req.params.postId).get()
        
     })
     .then((data) => {
         postInfo.comments = []
         data.forEach((doc) => {
+            console.log(doc.data())
             postInfo.comments.push(doc.data())
         });
         return res.status(200).json(postInfo)
@@ -141,7 +147,7 @@ exports.likePost = (req, res) => {
     // get post by id, increase its likeCount by 1
     // get the like document that has a postId of the postId
     // add req.user.username to list of likes
-    const dbRef = db.collection('/posts/').doc(req.params.postId)
+    const dbRef = db.collection('posts').doc(req.params.postId)
 
     dbRef
     .get()
@@ -216,16 +222,17 @@ exports.commentOnPost = (req, res) => {
     // 1. increase comment count on post
     // 2. add new comment to comment collection
 
-    let newComment = {}
-    newComment["body"] = req.body.body
-    newComment["createdAt"] = req.body.createdAt
-    newComment["postId"] = postId
-    newComment["username"] = req.user.username
+    let comment = {}
+    comment["body"] = req.body.body
+    comment["createdAt"] = new Date().toISOString()
+    comment["postId"] = postId
+    comment["username"] = req.user.username
+    comment["imageUrl"] = req.user.imageUrl
 
     db
     .collection('comments')
     .add({
-        newComment
+        comment
     })
     .then((data) => {
         // increment comment count by 1
@@ -233,14 +240,14 @@ exports.commentOnPost = (req, res) => {
     })
     .then((data) => {
         // commentCount = data._fieldsProto.commentCount
-        console.log(data._fieldsProto.commentCount.integerValue)
+        // console.log(data._fieldsProto.commentCount.integerValue)
         let newCommentCount = parseInt(data._fieldsProto.commentCount.integerValue)
         return db.collection('posts').doc(`${postId}`).update({
             commentCount: newCommentCount += 1
         })
     })
     .then(() => {
-        return res.status(201).json({message: "Comment posted successfully."})
+        res.json(comment)
     })
     .catch((err) => {
         res.status(500).json(err)

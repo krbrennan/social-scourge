@@ -23,6 +23,7 @@ exports.FBAuth = ((req, res, next) => {
         .then((data) => {
             // console.log(data.docs[0].data())
             req.user.username = data.docs[0].data().username
+            req.user.imageUrl = data.docs[0].data().imageUrl;
             next()
         })
         .catch((err) => {
