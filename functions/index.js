@@ -2,7 +2,15 @@ const functions = require('firebase-functions');
 
 // import modules
 const config = require('./key/config.js');
-const { getAllPosts, newPost, getPost, deletePost, likePost, commentOnPost } = require('./handlers/posts');
+const { 
+    getAllPosts, 
+    newPost, 
+    getPost, 
+    deletePost, 
+    likePost,
+    unlikePost,
+    commentOnPost 
+} = require('./handlers/posts');
 const { signup, signin, signout, uploadImg, getProfile, addUserDetails } = require('./handlers/users');
 const { admin, db } = require('./util/admin.js');
 
@@ -21,14 +29,13 @@ app.get('/post/:postId', getPost);
 app.post('/post', FBAuth, newPost);
 // delete post
 app.delete('/post/:postId',FBAuth, deletePost);
-
 // comment on post
 app.post('/post/:postId/comment', FBAuth, commentOnPost);
 
-// TODO
-// like post (not done)
+// like post 
 app.post('/post/:postId/like', FBAuth, likePost);
 // unlike post
+app.post('/post/:postId/unlike', FBAuth, unlikePost)
 
 
 // unlike post

@@ -144,9 +144,104 @@ exports.deletePost = (req, res) => {
 // 
 
 exports.likePost = (req, res) => {
-    // get post by id, increase its likeCount by 1
-    // get the like document that has a postId of the postId
-    // add req.user.username to list of likes
+    let likeDocId;
+    let newLike = {
+        username: req.user.username,
+        postId: req.params.postId
+    }
+    
+    // Create "like" doc in db
+    // give doc a postId to refer to the post being liked
+    // give doc a username to asscoaite a user to the like
+    // if it already exists return error saying that it's alread liked
+    // if it doesnt exist then go to the post and increment the like count by 1
+
+    // const likePath = db.collection('likes').where('postId', '==', req.params.postId)
+
+    // db.collection('posts').where('postId', '==', req.params.postId).get()
+    // .then((data) => {
+    //     console.log(data._docs())
+    // })
+
+    // TODO: first check if the post exists...
+    let postToLike = db.collection('posts').doc(req.params.postId)
+    postToLike
+        .get()
+        .then((data) => {
+            // console.log(data._fieldsProto)
+            // if there is no doc associated with this post, return 404
+            if(data._fieldsProto == undefined){
+                res.status(404).json({error: "Post not Found"})
+            } else {
+                // Need to query db likes to find if theres an entry that has the postId and req.user.username
+                // if there is already a like for this post and this user then return a 400, 
+                // otherwise need to create new like doc
+                const idk = db.collection('likes').where('postId', '==', req.params.postId).where('username', '==', req.user.username).get()
+                // console.log(idk)
+                .then((data) => {
+                    // console.log(data._docs())
+                    if(data._docs().length == 0){
+                        // if there is no like associated with this user and postId, create one
+                        return db.collection('likes').add({
+                            username: req.user.username,
+                            postId: req.params.postId
+                        })
+                        .then(()=> {
+                            // then increment post likeCount by 1
+                            db.collection('posts').doc(req.params.postId).get()
+                            .then((data) => {
+                                let newLikeCount = parseInt(data._fieldsProto.likeCount.integerValue)
+                                postToLike.update({
+                                    likeCount: newLikeCount += 1
+                                })
+                                .then(() => {
+                                    return res.status(200).json({message: "post successully liked"})
+                                })
+                            })
+                        })
+                    } else {
+                        // return error already liked
+                        return res.status(400).json({error: "post already liked"})
+                    }
+                })
+
+                    }
+                })
+        .catch((err) => {
+            return res.status(404).json({error: "Post not found"})
+        })
+    
+   
+
+    // dbRef
+    // .get()
+    // .then((data) => {
+    //     // incrase likeCount by 1
+    //     let newLikeCount = parseInt(data._fieldsProto.likeCount.integerValue)
+    //     dbRef.update({
+    //         likeCount: newLikeCount += 1
+    //     })
+    //     .catch((err) => {
+    //         res.status(500).json(err)
+    //     })
+    // })
+    // .catch((err) => {
+    //     res.status(500).json(err)
+    // })
+
+
+}
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+exports.unlikePost = (req, res) => {
+    // 
+    // How can I ensure that the user cannot unlike a post multiple times?
+    //          Have to check DB for list of users who liked to ensure that req.user.username isn't present in the list
     const dbRef = db.collection('posts').doc(req.params.postId)
 
     dbRef
@@ -155,51 +250,18 @@ exports.likePost = (req, res) => {
         // incrase likeCount by 1
         let newLikeCount = parseInt(data._fieldsProto.likeCount.integerValue)
         return dbRef.update({
-            likeCount: newLikeCount += 1
+            likeCount: newLikeCount -= 1
         })
         .catch((err) => {
             res.status(500).json(err)
         })
-
-    })
-    // 
-    // get like document that has postId of postId
-    // add req.user.username to list of likes
-    let likeId;
-    let listToUpdate = db.collection('/likes/').where('postId', '==', req.params.postId).get()
-    let docRefId;
-    let newLike;
-
-    listToUpdate
-    .then((data) => {
-        // get ID of likes
-        docRefId = data.docs[0].id
     })
     .then(() => {
-       return db
-        .collection('likes')
-        .doc(`${docRefId}`)
-        .get()
+        return res.status(200).json({message: "Post Disliked!"})
     })
-    .then((data) => {
-        const updatePath = db.collection('likes').doc(`${docRefId}`)
-        let likeList = {}
-        let updatedList = []
-        likeList = data._fieldsProto.list
-        console.log(likeList.arrayValue.values)
-        likeList.arrayValue.values.push({
-            stringValue: req.user.username,
-            valueType: 'stringValue'
-        })
-        console.log(likeList.arrayValue.values)
-
-    //    return updatePath.update({
-    //         like: likeList
-    //     })
-
+    .catch((err) => {
+        res.status(500).json(err)
     })
-
-
 }
 
 // 
