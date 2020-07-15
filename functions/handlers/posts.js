@@ -204,32 +204,11 @@ exports.likePost = (req, res) => {
                         return res.status(400).json({error: "post already liked"})
                     }
                 })
-
                     }
                 })
         .catch((err) => {
             return res.status(404).json({error: "Post not found"})
         })
-    
-   
-
-    // dbRef
-    // .get()
-    // .then((data) => {
-    //     // incrase likeCount by 1
-    //     let newLikeCount = parseInt(data._fieldsProto.likeCount.integerValue)
-    //     dbRef.update({
-    //         likeCount: newLikeCount += 1
-    //     })
-    //     .catch((err) => {
-    //         res.status(500).json(err)
-    //     })
-    // })
-    // .catch((err) => {
-    //     res.status(500).json(err)
-    // })
-
-
 }
 // 
 // 
@@ -242,28 +221,46 @@ exports.unlikePost = (req, res) => {
     // 
     // How can I ensure that the user cannot unlike a post multiple times?
     //          Have to check DB for list of users who liked to ensure that req.user.username isn't present in the list
-    const dbRef = db.collection('posts').doc(req.params.postId)
 
-    dbRef
+
+    // solution:
+    // check likes docs, if there is a complex query where this user has a like with the postId passed in params, delete the like doc then decriment the number of likes in the post doc
+    // const dbRef = db.collection('posts').doc(req.params.postId)
+
+    db
+    .collection('likes')
+    .where('username', '==', req.user.username)
+    .where('postId', '==', req.params.postId)
     .get()
     .then((data) => {
-        // incrase likeCount by 1
-        let newLikeCount = parseInt(data._fieldsProto.likeCount.integerValue)
-        return dbRef.update({
-            likeCount: newLikeCount -= 1
-        })
-        .catch((err) => {
-            res.status(500).json(err)
-        })
-    })
-    .then(() => {
-        return res.status(200).json({message: "Post Disliked!"})
-    })
-    .catch((err) => {
-        res.status(500).json(err)
+        // if data is empty, return 400 post cannot be unliked if it was never liked in the first place!
+        if(data._docs().length == 0) {
+            return res.status(400).json({ error: 'post cannot be unliked if it was never liked in the first place!'})
+        } else {
+            // delete the like doc
+            // then decriment the post likeCount
+            db
+            .collection('likes')
+            .where('username', '==', req.user.username)
+            .where('postId', '==', req.params.postId)
+            .get()
+            .then((data) => {
+                const likeToDelete = data._docs()[0].id
+                db.collection('likes').doc(likeToDelete).delete()
+                db.collection('posts').doc(req.params.postId).get()
+                .then((data) => {
+                    let newLikeCount = parseInt(data._fieldsProto.likeCount.integerValue)
+                    db.collection('posts').doc(req.params.postId).update({
+                        likeCount: newLikeCount -= 1
+                    })
+                })
+                .then(() => {
+                    return res.status(200).json({message: 'post successfully unliked!'})
+                })
+            })
+        }
     })
 }
-
 // 
 // 
 // 
