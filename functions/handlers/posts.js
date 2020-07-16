@@ -195,7 +195,8 @@ exports.likePost = (req, res) => {
                                     likeCount: newLikeCount += 1
                                 })
                                 .then(() => {
-                                    return res.status(200).json({message: "post successully liked"})
+                                    // return res.status(200).json({message: "post successully liked"})
+                                    return res.status(200).json(data._fieldsProto)
                                 })
                             })
                         })
@@ -253,10 +254,11 @@ exports.unlikePost = (req, res) => {
                     db.collection('posts').doc(req.params.postId).update({
                         likeCount: newLikeCount -= 1
                     })
+                    return res.status(200).json(data._fieldsProto)
                 })
-                .then(() => {
-                    return res.status(200).json({message: 'post successfully unliked!'})
-                })
+                // .then(() => {
+                //     return res.status(200).json({message: 'post successfully unliked!'})
+                // })
             })
         }
     })
@@ -269,7 +271,6 @@ exports.unlikePost = (req, res) => {
 // 
 // 
 exports.commentOnPost = (req, res) => {
-    // post ID = req.params.postId
     const postId = req.params.postId
     // userInfo contains:
     // user_id, email, uid, username
@@ -286,18 +287,19 @@ exports.commentOnPost = (req, res) => {
     comment["createdAt"] = new Date().toISOString()
     comment["postId"] = postId
     comment["username"] = req.user.username
-    comment["imageUrl"] = req.user.imageUrl
+    comment["imgUrl"] = req.user.imgUrl
 
     db
     .collection('comments')
     .add({
         comment
     })
-    .then((data) => {
-        // increment comment count by 1
+    .then(() => {
+        // increment post's comment count by 1
         return db.collection('posts').doc(`${postId}`).get()
     })
     .then((data) => {
+        console.log(data)
         // commentCount = data._fieldsProto.commentCount
         // console.log(data._fieldsProto.commentCount.integerValue)
         let newCommentCount = parseInt(data._fieldsProto.commentCount.integerValue)

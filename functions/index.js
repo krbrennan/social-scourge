@@ -38,9 +38,6 @@ app.post('/post/:postId/like', FBAuth, likePost);
 app.post('/post/:postId/unlike', FBAuth, unlikePost)
 
 
-// unlike post
-// comment on post
-
 // user route
 app.post('/signup', signup);
 app.post('/signin', signin);
