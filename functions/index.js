@@ -1,5 +1,7 @@
 const functions = require('firebase-functions');
 
+// const { db } = require('./util/admin');
+
 // import modules
 const config = require('./key/config.js');
 const { 
@@ -45,5 +47,61 @@ app.post('/signout', signout);
 app.post('/user/photo', FBAuth, uploadImg);
 app.get('/user/profile', FBAuth, getProfile);
 app.post('/user', FBAuth, addUserDetails);
+
+// notification routes
+exports.createNotificationOnLike = functions.firestore.document('likes/{id}')
+    .onCreate((dataSnapshot) => {
+        db.doc(`/posts/${snapshot.data().postId}`).get()
+            .then((doc) => {
+                if(doc.exists){
+                    return db.doc(`/notifications/${dataSnapshot.id}`).set({
+                        createdAt: new Date().toISOString(),
+                        receipent: doc.data().username,
+                        sender: dataSnapshot.data().username,
+                        type: 'like',
+                        read: 'false',
+                        postId: doc.id
+                    });
+                }
+            })
+            .then(() => {
+                return
+            })
+            .catch((error) => {
+                console.error(error)
+                return
+            })
+    })
+
+// These notifications aren't working; there's an issue with using the free account to use "cloud functions".
+// To fix I'll need to update my account type to the 'pay-as-you-use' one rather than the always-free one
+
+// exports.deleteNotificationOnUnlike = functions
+
+// exports.createNotificationOnComment = functions
+//     .region('us-central1')
+//     .firestore.document('comments/{id}')
+//     .onCreate((dataSnapshot) => {
+//         db.doc(`/posts/${snapshot.data().postId}`).get()
+//         .then((doc) => {
+//             if(doc.exists){
+//                 return db.doc(`/notifications/${dataSnapshot.id}`).set({
+//                     createdAt: new Date().toISOString(),
+//                     receipent: doc.data().username,
+//                     sender: dataSnapshot.data().username,
+//                     type: 'comment',
+//                     read: 'false',
+//                     postId: doc.id
+//                 });
+//             }
+//         })
+//         .then(() => {
+//             return
+//         })
+//         .catch((error) => {
+//             console.error(error)
+//             return
+//         })
+//     })
 
 exports.api = functions.https.onRequest(app);

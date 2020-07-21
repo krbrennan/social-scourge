@@ -42,6 +42,16 @@ let db = {
         username: 'user0',
         postId = '9JN4I3N2BB3IN'
       }
+    ]. 
+    notifications: [
+      {
+        recipient: 'user',
+        sender: 'user1',
+        read: 'true or false',
+        postId: 'oasdjadjkKJKksjd',
+        type: 'like or comment',
+        createdAt: '2020-01-15T00:50:43.798Z'
+      }
     ]
 };
 
