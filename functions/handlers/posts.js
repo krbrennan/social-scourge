@@ -1,33 +1,9 @@
 const { db} = require('../util/admin');
 const admin = require('../util/admin');
+const functions = require('firebase-functions');
 
 firebase = require('firebase');
 
-exports.getAllPosts = (req, res) => {
-    db.collection('posts')
-    .orderBy('created', 'desc')
-    .get()
-    .then((querySnapshot) => {
-        let posts = [];
-        querySnapshot.forEach((doc) => {
-            posts.push({
-                postId: doc.id,
-                body: doc.data().content,
-                username: doc.data().username,
-                created: doc.data().created
-            })
-        });
-        return res.json(posts);
-    })
-    .catch((err)=> {
-        console.error(err)
-    })
-}
-// 
-// 
-// 
-// 
-// 
 exports.newPost = (req, res) => {
     const newPost = {
         body: req.body.body,
@@ -53,6 +29,42 @@ exports.newPost = (req, res) => {
         console.error(err)
     })
 }
+
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+
+exports.getAllPosts = (req, res) => {
+    db.collection('posts')
+    .orderBy('createdAt', 'desc')
+    .get()
+    .then((querySnapshot) => {
+        // console.log(querySnapshot._docs())
+        let posts = [];
+        querySnapshot._docs().forEach((doc) => {
+            posts.push({
+                postId: doc.id,
+                body: doc._fieldsProto.body.stringValue,
+                username: doc._fieldsProto.username.stringValue,
+                createdAt: doc._fieldsProto.createdAt.stringValue,
+                userImg: doc._fieldsProto.imageUrl.stringValue
+            })
+        })
+        return res.status(200).json(posts);
+    })
+    .catch((err)=> {
+        console.error(err)
+    })
+}
+// 
+// 
+// 
+// 
+// 
 
 // 
 // 
