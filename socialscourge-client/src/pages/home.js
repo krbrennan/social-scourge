@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 
 import axios from 'axios';
 
+// Components
+import Post from '../components/Post';
+
 // Material-UI
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 class home extends Component {
 
@@ -22,26 +26,20 @@ class home extends Component {
                     posts: postData.data
                 })
             })
-            // .then(() => {
-            //     return res.status(200)
-            // })
-            // .catch((err) => {
-            //     res.status(500).json(err)
-            // })
+            .catch(err => console.log(err))
     }
 
     render() {
+        const { classes } = this.props;
+
+        let posts = this.state.posts ? 
+        this.state.posts.map(post => <Post post={post} />)
+        : <p>LOADING...</p>
+
         return (
             <Grid container className='container'>
                 <Grid item sm={8} xs={12}>
-                    { this.state.posts ? 
-                        // console.log(this.state.posts)
-                        this.state.posts.map((postItem) => {
-                           return <p>{postItem.body}</p> 
-                        })
-                    :
-                        <p>LOADING...</p>
-                    }
+                    { posts}
                 </Grid>
                 <Grid item sm={4} xs={12}>
                     <p>Profile</p>
@@ -52,3 +50,4 @@ class home extends Component {
 }
 
 export default home;
+// export default withStyles(styles)(home);

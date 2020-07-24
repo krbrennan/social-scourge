@@ -51,7 +51,9 @@ exports.getAllPosts = (req, res) => {
                 body: doc._fieldsProto.body.stringValue,
                 username: doc._fieldsProto.username.stringValue,
                 createdAt: doc._fieldsProto.createdAt.stringValue,
-                userImg: doc._fieldsProto.imageUrl.stringValue
+                userImg: doc._fieldsProto.imageUrl.stringValue,
+                likeCount: doc._fieldsProto.likeCount.integerValue,
+                commentCount: doc._fieldsProto.commentCount.integerValue
             })
         })
         return res.status(200).json(posts);

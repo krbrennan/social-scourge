@@ -31,11 +31,13 @@ app.post('/post', FBAuth, newPost);
 app.delete('/post/:postId',FBAuth, deletePost);
 // comment on post
 app.post('/post/:postId/comment', FBAuth, commentOnPost);
-
 // like post 
 app.post('/post/:postId/like', FBAuth, likePost);
 // unlike post
 app.post('/post/:postId/unlike', FBAuth, unlikePost)
+
+// get posts by username
+// app.post('/post/:username', FBAuth, getPostsByUsername)
 
 
 // user route
