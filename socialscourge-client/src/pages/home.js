@@ -33,7 +33,7 @@ class home extends Component {
         const { classes } = this.props;
 
         let posts = this.state.posts ? 
-        this.state.posts.map(post => <Post post={post} />)
+        this.state.posts.map(post => <Post key={post.postId} post={post} />)
         : <p>LOADING...</p>
 
         return (

@@ -17,6 +17,10 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 
+// DayJs
+import * as dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
 const styles = {
     card: {
         display: 'flex',
@@ -25,7 +29,8 @@ const styles = {
     },
     media: {
         width: 150,
-        backgroundSize: 100
+        backgroundSize: 100,
+        objectFit: "cover"
     },
     content: {
         padding: 25
@@ -34,6 +39,10 @@ const styles = {
 class Post extends Component {
     render() {
         const { classes, post: { username, createdAt, body, userImg, likeCount, commentCount, postId } } = this.props;
+        dayjs.extend(relativeTime)
+        const todayDay = dayjs(Date.now()).format();
+        // const daysAgo = dayjs(Date.now(), ['D']).subtract(dayjs(createdAt)).toString();
+        const daysAgo = dayjs(createdAt).date()
         return (
             <Card spacing={16} className={classes.card}>
                 <CardMedia
@@ -52,7 +61,7 @@ class Post extends Component {
                     { username }
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                    { createdAt }
+                    { dayjs(createdAt).fromNow() }
                 </Typography>
                 <Typography variant="body1" color="textPrimary">
                     { body }

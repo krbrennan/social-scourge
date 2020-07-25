@@ -67,19 +67,20 @@ exports.signin = (req, res) => {
             return res.json({ token })
         })
         .catch((err) => {
-            switch(err.code){
-                case 'auth/invalid-email':
-                    console.log('Check to make sure that your email address and password are correct')
-                    res.status(400).json({error: 'Check to make sure that your email address and password are correct'})
-                    break;
-                case 'auth/wrong-password':
-                    console.log('Check to make sure that your email address and password are correct')
-                    res.status(400).json({error: 'Check to make sure that your email address and password are correct'})
-                    break;
-                default:
-                    console.log('Something went wrong!')
-                    res.status(400).json({error: 'Something went wrong!'})
-            }
+            res.status(401).json(err)
+            // switch(err.code){
+                // case 'auth/invalid-email':
+                //     console.log('Check to make sure that your email address and password are correct')
+                //     res.status(400).json({error: 'Check to make sure that your email address and password are correct'})
+                //     break;
+                // case 'auth/wrong-password':
+                //     console.log('Check to make sure that your email address and password are correct')
+                //     res.status(400).json({error: 'Check to make sure that your email address and password are correct'})
+                //     break;
+                // default:
+                //     console.log('Something went wrong!')
+                //     res.status(400).json({error: 'Something went wrong!'})
+            // }
         })
 }
 
