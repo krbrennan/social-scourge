@@ -94,8 +94,8 @@ class login extends Component {
                     label='Email' 
                     variant='filled' 
                     name='email' 
-                    onChange={this.handleChange} /
-                >
+                    onChange={this.handleChange}
+                />
                 <TextField 
                     helperText={errors.email}
                     error={errors.email ? true : false}

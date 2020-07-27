@@ -40,9 +40,6 @@ class Post extends Component {
     render() {
         const { classes, post: { username, createdAt, body, userImg, likeCount, commentCount, postId } } = this.props;
         dayjs.extend(relativeTime)
-        const todayDay = dayjs(Date.now()).format();
-        // const daysAgo = dayjs(Date.now(), ['D']).subtract(dayjs(createdAt)).toString();
-        const daysAgo = dayjs(createdAt).date()
         return (
             <Card spacing={16} className={classes.card}>
                 <CardMedia
