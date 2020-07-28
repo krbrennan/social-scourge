@@ -62,7 +62,8 @@ class login extends Component {
         // send req to server and show errors, if successful then show errors
         axios.post('/signin', userData)
             .then((postData) => {
-                console.log(postData.data)
+                // console.log(postData.data)
+                localStorage.setItem('FBIdToken', `Bearer ${postData.data.token}`)
                 this.setState({
                     loading: false
                 })

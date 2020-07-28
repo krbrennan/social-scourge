@@ -67,12 +67,6 @@ exports.getAllPosts = (req, res) => {
 // 
 // 
 // 
-
-// 
-// 
-// 
-// 
-// 
 // 
 // 
 exports.getPost = (req, res) => {

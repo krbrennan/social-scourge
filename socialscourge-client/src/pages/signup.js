@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import logo from '../images/plague.png';
 
-import axios from 'axios';
+import Link from 'react-router-dom/Link';
 
+import axios from 'axios';
 
 // Material-ui
 import FormGroup from '@material-ui/core/FormGroup';
@@ -36,6 +37,15 @@ const styles = {
     formContainerItem: {
         // marginTop: 5
         width: 500
+    },
+    error: {
+        color: 'red',
+        margin: '1em 0',
+        textAlign: 'center'
+    },
+    small: {
+        textAlign: 'center',
+        margin: '20px auto'
     }
 }
 
@@ -70,24 +80,27 @@ export class signup extends Component {
             password: this.state.password,
             confirmPassword: this.state.confirmPassword,
             username: this.state.username,
-            biograpgy: this.state.biography,
-            country: this.state.country,
-            state: this.state.state,
-            website: this.state.website
+            bio: this.state.biography
         }
 
         axios.post('/signup', userData)
             .then((res) => {
-                console.log("Great success")
+                localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`)
+                this.props.history.push('/')
             })
             .catch((err) => {
                 console.log(err)
+                // console.log(err.response.data.message)
+                this.setState({
+                    errors: err.response.data.message
+                })
             })
     }
 
 
     render() {
         const { classes } = this.props;
+        const { errors } = this.state;
         return (
             <div className={classes.signupPage}>
                 <div className={ classes.signupTop }>
@@ -101,12 +114,20 @@ export class signup extends Component {
                     <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='username' defaultValue='Username' />
                     <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='password' defaultValue='Password' />
                     <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='confirmPassword' defaultValue='Confirm Password' />
-                    <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' multiline rows={4} label='Optional' name='biography' defaultValue='Biography' />
-                    <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='country' defaultValue='Country' />
-                    <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Optional' name='state' defaultValue='State' />
-                    <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='optional' name='website' defaultValue='Personal Website' />
+                    {/* <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' multiline rows={4} label='Optional' name='biography' defaultValue='Biography' /> */}
+                    {/* <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='country' defaultValue='Country' /> */}
+                    {/* <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Optional' name='state' defaultValue='State' /> */}
+                    {/* <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='optional' name='website' defaultValue='Personal Website' /> */}
                     {/* <TextField className={ classes.formContainerItem } label='Optional' def/> */}
+                    {errors && (
+                        <Typography className={ classes.error } variant='body2'>
+                            {errors}
+                        </Typography>
+                    )}
                     <Button variant='contained' color='primary' type='submit'>Submit</Button>
+                    <small className={ classes.small }>
+                        Already have an Account? Login <Link to='/login'>here</Link>
+                    </small>
                 </form>
             </div>
         )

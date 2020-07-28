@@ -4,6 +4,7 @@ import axios from 'axios';
 
 // Components
 import Post from '../components/Post';
+import Profile from '../components/Profile';
 
 // Material-UI
 import Grid from '@material-ui/core/Grid';
@@ -39,10 +40,10 @@ class home extends Component {
         return (
             <Grid container className='container'>
                 <Grid item sm={8} xs={12}>
-                    { posts}
+                    { posts }
                 </Grid>
                 <Grid item sm={4} xs={12}>
-                    <p>Profile</p>
+                    <Profile />
                 </Grid>
             </Grid>
         )

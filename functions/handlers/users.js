@@ -41,11 +41,13 @@ exports.signup = (req, res) => {
             let errCode = err.code;
             let errMsg = err.message;
             if(errCode == 'auth/email-already-in-use') {
-                res.status(400).json({email: "Email is already in use"})
+                res.status(400).json({message: "Email is already in use"})
             } else if(errCode == 'auth/weak-password') {
-                console.log('Your password is too weak.')
+                res.status(400).json({message: 'Weak password'})
+                // console.log('Your password is too weak.')
             } else if (errCode == 'auth/invalid-email'){
-                console.log('This is not a valid email')
+                res.status(400).json({message: 'Invalid Email'})
+                // console.log('This is not a valid email')
             } else {
                 res.status(500).json({error: errCode}) 
             } 
