@@ -8,7 +8,12 @@ import axios from 'axios';
 import { Typography } from '@material-ui/core';
 
 const styles = {
-
+    loggedInDiv: {
+        height: 400,
+        width: 400,
+        background: 'yellow',
+        margin: '0'
+    },
 }
 
 class Profile extends Component {
@@ -37,19 +42,20 @@ class Profile extends Component {
     }
 
     render(){
+        const { classes } = this.props;
         return(
             <div>
                 { this.state.isLoggedIn ?
-                    <div className='container'>
-                        <Typography>
-                            Logged In
-                        </Typography>
+                    <div>
+                        <div className={classes.loggedInDiv}>
+                            <img />
+                        </div>
                     </div>
                 :
-                    <div className='container'>
-                        <Typography>
-                            Not Logged in
-                        </Typography>
+                    <div>
+                        <div>
+
+                        </div>
                     </div>
                 }
             </div>

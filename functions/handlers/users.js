@@ -5,21 +5,39 @@ firebase.initializeApp(config);
 
 exports.signup = (req, res) => {
     let newUser;
+    let errors = {};
 
     // validate passowrd and confirmPassword
     if(req.body.password !== req.body.confirmPassword){
-        return res.status(409).json({message: "Passwords do not match"})
-    } else {
-        newUser = {
-            "email": req.body.email,
-            "password": req.body.password,
-            "confirmPassword": req.body.password,
-            "username": req.body.username,
-            "imgUrl": `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/whip.jpg?alt=media`,
-            "createdAt": new Date().toISOString(),
-            "userId": null
-        };
-    }
+        // return res.status(409).json({message: "Passwords do not match"})
+        errors['password'] = 'Passwords do not match'
+    } 
+    if(req.body.username == ''){
+        errors['username'] = 'Cannot have a blank username'
+    } 
+    // if(req.body.email == ''){
+    //     errors['email'] = 'Cannot have a blank email'
+    // }
+
+    db.collection('users').where('username', '==', req.body.username).get()
+        .then((data) => {
+            if(data._docs().length !== 0){
+                errors['dupName'] = 'Username already exists'
+                return res.status(400).json(errors)
+            }
+        })
+    
+
+    newUser = {
+        "email": req.body.email,
+        "password": req.body.password,
+        "confirmPassword": req.body.password,
+        "username": req.body.username,
+        "imgUrl": `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/whip.jpg?alt=media`,
+        "createdAt": new Date().toISOString(),
+        "userId": null
+    };
+
 
     // validate user
     let userToken, userId;
@@ -38,21 +56,12 @@ exports.signup = (req, res) => {
             return res.status(201).json({ userToken })
         })
         .catch((err) => {
-            let errCode = err.code;
-            let errMsg = err.message;
-            if(errCode == 'auth/email-already-in-use') {
-                res.status(400).json({message: "Email is already in use"})
-            } else if(errCode == 'auth/weak-password') {
-                res.status(400).json({message: 'Weak password'})
-                // console.log('Your password is too weak.')
-            } else if (errCode == 'auth/invalid-email'){
-                res.status(400).json({message: 'Invalid Email'})
-                // console.log('This is not a valid email')
-            } else {
-                res.status(500).json({error: errCode}) 
-            } 
-            // res.status(500).json({error: errMsg})
+            errors[err.code] = err.message
+            if(errors){
+                return res.status(400).json(errors)
+            }
         })
+
 }
 
 

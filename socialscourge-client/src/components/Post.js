@@ -25,7 +25,7 @@ const styles = {
     card: {
         display: 'flex',
         marginBottom: 20,
-        maxWidth: "80%",
+        maxWidth: "90%",
     },
     media: {
         width: 150,

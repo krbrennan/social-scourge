@@ -36,12 +36,13 @@ const styles = {
     },
     formContainerItem: {
         // marginTop: 5
-        width: 500
+        width: 500,
+        color: 'red'
     },
     error: {
-        color: 'red',
-        margin: '1em 0',
-        textAlign: 'center'
+        // color: 'red',
+        // margin: '1em 0',
+        // textAlign: 'center'
     },
     small: {
         textAlign: 'center',
@@ -61,7 +62,7 @@ export class signup extends Component {
             country: '',
             state: '',
             website: '',
-            errors: ''
+            errors: []
         }
     }
 
@@ -89,10 +90,16 @@ export class signup extends Component {
                 this.props.history.push('/')
             })
             .catch((err) => {
-                console.log(err)
                 // console.log(err.response.data.message)
+                // console.log(Object.keys(err.response.data))
+                let errObject = []
+                const resErrors = err.response.data;
+                for (const property in resErrors) {
+                    // errObject[JSON.stringify(property)] = resErrors[property]
+                    errObject[property] = resErrors[property]
+                }
                 this.setState({
-                    errors: err.response.data.message
+                    errors: errObject
                 })
             })
     }
@@ -101,6 +108,16 @@ export class signup extends Component {
     render() {
         const { classes } = this.props;
         const { errors } = this.state;
+        let email = errors["auth/invalid-email"]
+        let password = errors["password"]
+        let invPassword = errors["auth/weak-password"]
+        let emailInUse = errors["auth/email-already-in-use"]
+        let dupUsername = errors["dupName"]
+        {console.log(errors)}
+        // {console.log(errors["auth/invalid-email"])}
+        // errors:
+        // password
+        // auth/invalid-email
         return (
             <div className={classes.signupPage}>
                 <div className={ classes.signupTop }>
@@ -109,11 +126,54 @@ export class signup extends Component {
                         Signup
                     </Typography>
                 </div>
+                <FormControl>
                 <form className={classes.formContainer} onSubmit={ this.handleSubmit }>
-                    <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='email' defaultValue='Email' />
-                    <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='username' defaultValue='Username' />
-                    <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='password' defaultValue='Password' />
-                    <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='confirmPassword' defaultValue='Confirm Password' />
+                    <TextField className={ classes.formContainerItem } 
+                        error={ ( email ) || emailInUse } 
+                        onChange={ this.handleChange } 
+                        variant='filled' 
+                        helperText={ (email ? email : null) || (emailInUse ? emailInUse : null) } 
+                        required 
+                        label='Required' 
+                        name='email' 
+                        defaultValue='Email' 
+                    />
+                    <TextField className={ classes.formContainerItem }
+                        error={ dupUsername }
+                        helperText={ dupUsername ? dupUsername : null}
+                        onChange={ this.handleChange } 
+                        variant='filled' 
+                        required 
+                        label='Required' 
+                        name='username' 
+                        defaultValue='Username' 
+                    />
+                    <TextField className={ classes.formContainerItem } 
+                        error={( invPassword ? true : false ) || ( password ? true : false ) }
+                        // error={ password ? true : false }
+                        helperText={ ( password ? password : null ) || (invPassword ? invPassword : null) } 
+                        // helperText={ invPassword ? invPassword : null } 
+                        onChange={ this.handleChange } 
+                        variant='filled'  
+                        required 
+                        label='Required' 
+                        name='password' 
+                        defaultValue='Password' 
+                    />
+                    <TextField className={ classes.formContainerItem } 
+                        // error={ errors['password'] ? true : false } 
+                        // error={ invPassword ? true : false } 
+                        // error={ password ? true : false }
+                        // helperText={ password ? password : null } 
+                        error={( invPassword ? true : false ) || ( password ? true : false )}
+                        helperText={ ( password ? password : null ) || (invPassword ? invPassword : null) } 
+                        onChange={ this.handleChange } 
+                        variant='filled' 
+                        required 
+                        label='Required' 
+                        name='confirmPassword' 
+                        defaultValue='Confirm Password' 
+                    />
                     {/* <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' multiline rows={4} label='Optional' name='biography' defaultValue='Biography' /> */}
                     {/* <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='country' defaultValue='Country' /> */}
                     {/* <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Optional' name='state' defaultValue='State' /> */}
@@ -129,6 +189,7 @@ export class signup extends Component {
                         Already have an Account? Login <Link to='/login'>here</Link>
                     </small>
                 </form>
+                </FormControl>
             </div>
         )
     }
