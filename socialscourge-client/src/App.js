@@ -6,6 +6,10 @@ import './App.css';
 import Navbar from './components/Navbar';
 import AuthRoute from './util/AuthRoute';
 
+// Redux
+import { Provider } from 'react-redux';
+import store from './redux/reducers/store';
+
 // pages
 import home from './pages/home';
 import login from './pages/login';
@@ -37,7 +41,7 @@ function App() {
   // const { classes } = styles();
   return (
     <MuiThemeProvider theme={theme}>
-      <div className="App">
+      <Provider store={store}>
         <Router>
         <Navbar />
           <Switch>
@@ -46,7 +50,7 @@ function App() {
             <AuthRoute exact path="/signup" component={ signup } authenticated={authenticated} />
           </Switch>
         </Router>
-      </div>
+      </Provider>
       </MuiThemeProvider>
   );
 }

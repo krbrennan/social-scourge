@@ -150,29 +150,24 @@ export class signup extends Component {
                     />
                     <TextField className={ classes.formContainerItem } 
                         error={( invPassword ? true : false ) || ( password ? true : false ) }
-                        // error={ password ? true : false }
-                        helperText={ ( password ? password : null ) || (invPassword ? invPassword : null) } 
-                        // helperText={ invPassword ? invPassword : null } 
+                        helperText={ ( password ? password : null ) || (invPassword ? invPassword : null) }  
                         onChange={ this.handleChange } 
                         variant='filled'  
-                        required 
-                        label='Required' 
+                        required
+                        type='password'
+                        label='Password' 
                         name='password' 
-                        defaultValue='Password' 
                     />
                     <TextField className={ classes.formContainerItem } 
-                        // error={ errors['password'] ? true : false } 
-                        // error={ invPassword ? true : false } 
-                        // error={ password ? true : false }
-                        // helperText={ password ? password : null } 
                         error={( invPassword ? true : false ) || ( password ? true : false )}
                         helperText={ ( password ? password : null ) || (invPassword ? invPassword : null) } 
                         onChange={ this.handleChange } 
                         variant='filled' 
-                        required 
-                        label='Required' 
+                        required
+                        type='password'
+                        label='Confirm Password' 
                         name='confirmPassword' 
-                        defaultValue='Confirm Password' 
+                        fullWidth
                     />
                     {/* <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' multiline rows={4} label='Optional' name='biography' defaultValue='Biography' /> */}
                     {/* <TextField className={ classes.formContainerItem } onChange={ this.handleChange } variant='filled' required label='Required' name='country' defaultValue='Country' /> */}

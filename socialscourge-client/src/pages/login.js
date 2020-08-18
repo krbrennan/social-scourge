@@ -10,6 +10,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+// Redux utils
+import { connect } from 'react-redux'
+import { loginUser } from '../redux/actions/userActions';
 // request
 import axios from 'axios';
 
@@ -39,8 +42,7 @@ class login extends Component {
         this.state = {
             email: '',
             password: '',
-            loading: false,
-            errors: ''
+            errors: []
         }
     }
 
@@ -52,35 +54,17 @@ class login extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.setState({
-            loading: true
-        })
+
         const userData = {
             email: this.state.email,
             password: this.state.password
         }
-        // send req to server and show errors, if successful then show errors
-        axios.post('/signin', userData)
-            .then((postData) => {
-                // console.log(postData.data)
-                localStorage.setItem('FBIdToken', `Bearer ${postData.data.token}`)
-                this.setState({
-                    loading: false
-                })
-                this.props.history.push('/')
-            })
-            .catch((err) => {
-                // console.log(err.response)
-                this.setState({
-                    errors: "Incorrect username or password.",
-                    loading: false
-                })
-            })
+        this.props.loginUser(userData, this.props.history)
     }
 
     render() {
-        const { classes } = this.props;
-        const { errors, loading } = this.state;
+        const { classes, UI: { loading } } = this.props;
+        const { errors } = this.state;
         return (
             <div className='container login-form'>
                 <img src={AppIcon} alt='scourge' className={classes.image} />
@@ -89,17 +73,17 @@ class login extends Component {
                 </Typography>
             <form className='login-form' onSubmit={ this.handleSubmit }>
                 <TextField 
-                    helperText={errors.password}
-                    error={errors.password ? true : false}
+                    helperText={errors.email}
+                    error={errors.email ? true : false}
                     required 
                     label='Email' 
-                    variant='filled' 
+                    variant='filled'
                     name='email' 
                     onChange={this.handleChange}
                 />
                 <TextField 
-                    helperText={errors.email}
-                    error={errors.email ? true : false}
+                    helperText={errors.password}
+                    error={errors.password ? true : false}
                     className={classes.inputField}
                     onChange={this.handleChange} 
                     required 
@@ -122,7 +106,24 @@ class login extends Component {
     }
 }
 
-export default withStyles(styles)(login)
+login.propTypes = {
+    classes: PropTypes.object.isRequired,
+    loginUser: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    UI: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+    user: state.user,
+    UI: state.UI
+})
+
+const mapActionsToProps = {
+    loginUser
+}
+
+// export default withStyles(styles)(login)
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(login))
 
 // form
 // axios to pass form data to be authenticated
