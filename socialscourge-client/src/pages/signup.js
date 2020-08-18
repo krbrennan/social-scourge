@@ -12,6 +12,11 @@ import { TextField, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 
+// Redux utils
+import { connect } from 'react-redux';
+import { signupUser } from '../redux/actions/userActions';
+import PropTypes from 'prop-types';
+
 const styles = {
     signupPage: {
         margin: '80px auto 0 auto',
@@ -74,39 +79,27 @@ export class signup extends Component {
         })
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.UI.errors){
+            this.setState({ errors: nextProps.UI.errors });
+        }
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
-        const userData = {
+        const newUserData = {
             email: this.state.email,
             password: this.state.password,
             confirmPassword: this.state.confirmPassword,
             username: this.state.username,
             bio: this.state.biography
         }
-
-        axios.post('/signup', userData)
-            .then((res) => {
-                localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`)
-                this.props.history.push('/')
-            })
-            .catch((err) => {
-                // console.log(err.response.data.message)
-                // console.log(Object.keys(err.response.data))
-                let errObject = []
-                const resErrors = err.response.data;
-                for (const property in resErrors) {
-                    // errObject[JSON.stringify(property)] = resErrors[property]
-                    errObject[property] = resErrors[property]
-                }
-                this.setState({
-                    errors: errObject
-                })
-            })
+        this.props.signupUser(newUserData, this.props.history);
     }
 
 
     render() {
-        const { classes } = this.props;
+        const { classes, UI: { loading } } = this.props;
         const { errors } = this.state;
         let email = errors["auth/invalid-email"]
         let password = errors["password"]
@@ -190,7 +183,19 @@ export class signup extends Component {
     }
 }
 
-export default withStyles(styles)(signup)
+signup.propTypes = {
+    classes: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    UI: PropTypes.object.isRequired,
+    signupUser: PropTypes.func.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    user: state.user,
+    UI: state.UI
+});
+
+export default connect(mapStateToProps, { signupUser })(withStyles(styles)(signup))
 // export default signup
 
 // field elements:
