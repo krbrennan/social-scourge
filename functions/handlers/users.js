@@ -80,20 +80,34 @@ exports.signin = (req, res) => {
       return res.json({ token });
     })
     .catch((err) => {
-      res.status(401).json(err);
-      // switch(err.code){
-      // case 'auth/invalid-email':
-      //     console.log('Check to make sure that your email address and password are correct')
-      //     res.status(400).json({error: 'Check to make sure that your email address and password are correct'})
-      //     break;
-      // case 'auth/wrong-password':
-      //     console.log('Check to make sure that your email address and password are correct')
-      //     res.status(400).json({error: 'Check to make sure that your email address and password are correct'})
-      //     break;
-      // default:
-      //     console.log('Something went wrong!')
-      //     res.status(400).json({error: 'Something went wrong!'})
-      // }
+      // return res.status(401).json(err);
+      switch (err.code) {
+        case "auth/invalid-email":
+          console.log(
+            "Check to make sure that your email address and password are correct"
+          );
+          res
+            .status(400)
+            .json({
+              error:
+                "Check to make sure that your email address and password are correct",
+            });
+          break;
+        case "auth/wrong-password":
+          console.log(
+            "Check to make sure that your email address and password are correct"
+          );
+          res
+            .status(400)
+            .json({
+              error:
+                "Check to make sure that your email address and password are correct",
+            });
+          break;
+        default:
+          console.log("Something went wrong!");
+          res.status(400).json({ error: "Something went wrong!" });
+      }
     });
 };
 
@@ -139,6 +153,7 @@ exports.getProfile = (req, res) => {
       data.forEach((doc) => {
         userInfo.likes.push(doc.data());
       });
+      console.log(userInfo);
       return res.json(userInfo);
     })
     .catch((err) => {
@@ -238,6 +253,43 @@ exports.uploadImg = (req, res) => {
   busboy.end(req.rawBody);
 };
 
+exports.getUserDetails = (req, res) => {
+  let userData = {};
+  db.doc(`/users/${req.params.username}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData.user = doc.data();
+        return db
+          .collection("screams")
+          .where("username", "==", req.params.username)
+          .orderBy("createdAt", "desc")
+          .get();
+      } else {
+        return res.status(404).json({ errror: "User not found" });
+      }
+    })
+    .then((data) => {
+      userData.screams = [];
+      data.forEach((doc) => {
+        userData.screams.push({
+          body: doc.data().body,
+          createdAt: doc.data().createdAt,
+          username: doc.data().username,
+          userImage: doc.data().userImage,
+          likeCount: doc.data().likeCount,
+          commentCount: doc.data().commentCount,
+          postmId: doc.id,
+        });
+      });
+      return res.json(userData);
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
 //
 //
 //
@@ -245,3 +297,32 @@ exports.uploadImg = (req, res) => {
 //
 //
 //
+// Get own user details
+exports.getAuthenticatedUser = (req, res) => {
+  // console.log(req.user.username);
+  let userData = {};
+  db.doc(`/users/${req.user.username}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData.credentials = doc.data();
+        return db
+          .collection("likes")
+          .where("username", "==", req.user.username)
+          .get();
+      }
+    })
+    .then((data) => {
+      userData.likes = [];
+      data.forEach((doc) => {
+        userData.likes.push(doc.data());
+      });
+    })
+    .then(() => {
+      return res.json(userData);
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};

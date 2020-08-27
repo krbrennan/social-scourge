@@ -58,9 +58,14 @@ class login extends Component {
     }
   }
 
+  // componentDidUpdate(nextProps) {
+  //   if (nextProps.UI.errors) {
+  //     this.setState({ errors: nextProps.UI.errors });
+  //   }
+  // }
+
   handleSubmit = (event) => {
     event.preventDefault();
-
     const userData = {
       email: this.state.email,
       password: this.state.password,

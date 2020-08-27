@@ -1,4 +1,14 @@
 {
+  "hosting": {
+    "public": "./socialscourge-client/public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  },
+  "rewrites": [
+    {
+      "source": "**",
+      "destination": "/index.html"
+    }
+  ],
   "emulators": {
     "functions": {
       "port": 5001
@@ -11,9 +21,6 @@
     }
   },
   "functions": {
-    "predeploy": [
-      
-    ],
     "source": "functions"
   }
 }
