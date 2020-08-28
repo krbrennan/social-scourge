@@ -1,62 +1,61 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "./App.css";
 
 // Components
-import Navbar from './components/Navbar';
-import AuthRoute from './util/AuthRoute';
+import Navbar from "./components/Navbar";
+import AuthRoute from "./util/AuthRoute";
 
 // Redux
-import { Provider } from 'react-redux';
-import store from './redux/reducers/store';
-import { SET_AUTHENTICATED } from './redux/reducers/types';
-import { logoutUser, getUserData } from './redux/actions/userActions';
+import { Provider } from "react-redux";
+import store from "./redux/reducers/store";
+import { SET_AUTHENTICATED } from "./redux/reducers/types";
+import { logoutUser, getUserData } from "./redux/actions/userActions";
 
 // pages
-import home from './pages/home';
-import login from './pages/login';
-import signup from './pages/signup';
-import themeFile from './util/theme';
-import jwtDecode from 'jwt-decode';
+import home from "./pages/home";
+import login from "./pages/login";
+import signup from "./pages/signup";
+import themeFile from "./util/theme";
+import jwtDecode from "jwt-decode";
 
 // Material-Ui
-import { createMuiTheme } from '@material-ui/core/styles';
-import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
-import axios from 'axios';
+import { createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import axios from "axios";
 // import { withStyles } from '@material-ui/styles';
 // import PropTypes from 'prop-types';
 
-const theme = createMuiTheme({themeFile});
+const theme = createMuiTheme({ themeFile });
 
 let authenticated;
 const token = localStorage.FBIdToken;
-if(token){
+if (token) {
   const decodedToken = jwtDecode(token);
-  if(decodedToken.exp * 1000 < Date.now()){
-    store.dispatch(logoutUser())
-    window.location.href = '/login'
+  if (decodedToken.exp * 1000 < Date.now()) {
+    store.dispatch(logoutUser());
+    window.location.href = "/login";
   } else {
     store.dispatch({ type: SET_AUTHENTICATED });
-    axios.defaults.headers.common['Authorization'] = token;
+    axios.defaults.headers.common["Authorization"] = token;
     store.dispatch(getUserData());
   }
 }
 
 function App() {
-  // const { classes } = styles();
   return (
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
         <Router>
-        <Navbar />
+          <Navbar />
           <Switch>
-            <Route exact path="/" component={ home } />
-            <AuthRoute exact path="/login" component={ login } />
-            <AuthRoute exact path="/signup" component={ signup } />
+            <Route exact path="/" component={home} />
+            <AuthRoute exact path="/login" component={login} />
+            <AuthRoute exact path="/signup" component={signup} />
           </Switch>
         </Router>
       </Provider>
-      </MuiThemeProvider>
+    </MuiThemeProvider>
   );
 }
 

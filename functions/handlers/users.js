@@ -37,6 +37,7 @@ exports.signup = (req, res) => {
     imgUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/whip.jpg?alt=media`,
     createdAt: new Date().toISOString(),
     userId: null,
+    bio: "",
   };
 
   // validate user
@@ -86,23 +87,19 @@ exports.signin = (req, res) => {
           console.log(
             "Check to make sure that your email address and password are correct"
           );
-          res
-            .status(400)
-            .json({
-              error:
-                "Check to make sure that your email address and password are correct",
-            });
+          res.status(400).json({
+            error:
+              "Check to make sure that your email address and password are correct",
+          });
           break;
         case "auth/wrong-password":
           console.log(
             "Check to make sure that your email address and password are correct"
           );
-          res
-            .status(400)
-            .json({
-              error:
-                "Check to make sure that your email address and password are correct",
-            });
+          res.status(400).json({
+            error:
+              "Check to make sure that your email address and password are correct",
+          });
           break;
         default:
           console.log("Something went wrong!");

@@ -20,14 +20,31 @@ const styles = {
   loggedInDiv: {
     height: 400,
     width: 400,
-    background: "yellow",
     margin: "0",
   },
   paper: {
-    background: "green",
+    padding: 20,
   },
   profile: {
-    background: "red",
+    "& image-wrapper": {
+      display: "flex",
+      textAlign: "center",
+      position: "relative",
+      "& button": {
+        position: "absolute",
+        top: "80%",
+        left: "70%",
+      },
+    },
+  },
+  profileImg: {
+    height: "120px",
+    display: "flex",
+    width: "100px",
+    margin: "0 auto",
+  },
+  imageWrapper: {
+    display: "flex",
   },
 };
 
@@ -36,7 +53,7 @@ class Profile extends Component {
     const {
       classes,
       user: {
-        credentials: { username, createdAt, imageUrl, userId, email },
+        credentials: { username, createdAt, imgUrl, userId, email },
         authenticated,
         loading,
       },
@@ -46,7 +63,7 @@ class Profile extends Component {
         <Paper className={classes.paper}>
           <div className={classes.profile}>
             <div className="image-wrapper">
-              <img src={imageUrl} alt="profile" className="profile-image" />
+              <img src={imgUrl} alt="profile" className={classes.profileImg} />
               <input
                 type="file"
                 id="imageInput"
