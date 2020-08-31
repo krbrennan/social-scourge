@@ -38,6 +38,8 @@ exports.signup = (req, res) => {
     createdAt: new Date().toISOString(),
     userId: null,
     bio: "",
+    website: "",
+    location: "",
   };
 
   // validate user
@@ -143,6 +145,9 @@ exports.getProfile = (req, res) => {
       //   userInfo["website"] = data._fieldsProto.website.stringValue;
       //   userInfo["location"] = data._fieldsProto.location.stringValue;
       userInfo["email"] = data._fieldsProto.email.stringValue;
+      userInfo["bio"] = data._fieldsProto.bio.stringValue;
+      userInfo["location"] = data._fieldsProto.location.stringValue;
+      userInfo["website"] = data._fieldsProto.website.stringValue;
       return db.collection("likes").where("username", "==", username).get();
     })
     .then((data) => {
@@ -276,7 +281,10 @@ exports.getUserDetails = (req, res) => {
           userImage: doc.data().userImage,
           likeCount: doc.data().likeCount,
           commentCount: doc.data().commentCount,
-          postmId: doc.id,
+          postId: doc.id,
+          bio: doc.data().bio,
+          location: doc.data().location,
+          website: doc.data().website,
         });
       });
       return res.json(userData);

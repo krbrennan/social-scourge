@@ -21,17 +21,17 @@ const styles = {
     // marginBottom: 10
   },
   heading: {
-    marginTop: 10,
+    margin: 30,
     textAlign: "center",
   },
   image: {
-    height: "64px",
-    width: "64px",
+    height: "80px",
+    width: "80px",
     margin: "0 auto",
+    marginTop: 50,
   },
   customError: {
     color: "red",
-    margin: "1em 0",
     textAlign: "center",
   },
 };
