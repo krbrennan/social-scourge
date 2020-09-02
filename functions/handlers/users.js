@@ -222,7 +222,7 @@ exports.uploadImg = (req, res) => {
     }
     // first get image extension
     const imgType = filename.split(".")[filename.split(".").length - 1];
-    imgFileName = "img1" + "." + imgType;
+    imgFileName = filename.split(".")[0] + "." + imgType;
     const filePath = path.join(os.tmpdir(), imgFileName);
     imageToBeUploaded = { filePath, mimetype };
 

@@ -29,10 +29,8 @@ const styles = {
   },
   media: {
     width: 150,
-    borderRadius: "35%",
     backgroundRepeat: "no-repeat",
-    backgroundSize: 100,
-    // objectFit: "cover",
+    objectFit: "cover",
   },
   content: {
     padding: 25,

@@ -7,18 +7,24 @@ import Button from "@material-ui/core/Button";
 import React, { Component, Fragment } from "react";
 import Link from "react-router-dom/Link";
 import PropTypes from "prop-types";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
 
 // Icons
 import LocationOn from "@material-ui/icons/LocationOn";
 import LinkIcon from "@material-ui/icons/Link";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import LanguageIcon from "@material-ui/icons/Language";
+import EditIcon from "@material-ui/icons/Edit";
 
 import dayjs from "dayjs";
 import { connect } from "react-redux";
 
 import LogoutBtn from "./LogoutBtn.js";
 import EditProfile from "./EditProfile.js";
+import { uploadImage, logoutUser } from "../redux/actions/userActions.js";
+
+import axios from "axios";
 
 const styles = {
   hr: {
@@ -43,6 +49,10 @@ const styles = {
       display: "flex",
       textAlign: "center",
       position: "relative",
+      "& upload-img": {
+        textAlign: "center",
+        margin: "0 auto",
+      },
       "& button": {
         position: "absolute",
         top: "80%",
@@ -71,13 +81,26 @@ const styles = {
   },
   ".bottom-buttons": {
     display: "flex",
-    height: "200px",
     // flexDirection: "row",
     padding: "2em",
   },
 };
 
 class Profile extends Component {
+  handleImageChange = (event) => {
+    const image = event.target.files[0];
+    console.log(image);
+    const formData = new FormData();
+    formData.append("newImage", image);
+
+    this.props.uploadImage(formData);
+  };
+
+  handleEditPicture = () => {
+    const fileInput = document.getElementById("imageInput");
+    fileInput.click();
+  };
+
   render() {
     const {
       classes,
@@ -103,11 +126,17 @@ class Profile extends Component {
             <div className="image-wrapper">
               <img src={imgUrl} alt="profile" className={classes.profileImg} />
               <input
+                className="upload-img"
                 type="file"
                 id="imageInput"
                 hidden="hidden"
-                onChange={this.usernameImageChange}
+                onChange={this.handleImageChange}
               />
+              <Tooltip title="Edit">
+                <IconButton id="imageInput" onClick={this.handleEditPicture}>
+                  <EditIcon color="primary">Edit Profile Image</EditIcon>
+                </IconButton>
+              </Tooltip>
             </div>
             <div className="profile-details">
               <MuiLink
@@ -193,6 +222,8 @@ class Profile extends Component {
   }
 }
 
+const mapActionsToProps = { logoutUser, uploadImage };
+
 const mapStateToProps = (state) => ({
   user: state.user,
 });
@@ -202,4 +233,7 @@ Profile.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(Profile));
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withStyles(styles)(Profile));
