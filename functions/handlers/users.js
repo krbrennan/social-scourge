@@ -172,7 +172,9 @@ exports.getProfile = (req, res) => {
 //
 exports.addUserDetails = (req, res) => {
   // updates user profile
-  const username = req.body.username;
+  console.log(req.user.username);
+  console.log("reqqqqqqq:", req);
+  const username = req.user.username;
 
   let userInfo = {
     bio: req.body.bio,

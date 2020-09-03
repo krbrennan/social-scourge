@@ -41,6 +41,10 @@ const styles = {
   paper: {
     padding: 20,
   },
+  button: {
+    borderRadius: "0",
+    height: "200em",
+  },
   profile: {
     textAlign: "center",
     display: "flex",
@@ -89,7 +93,6 @@ const styles = {
 class Profile extends Component {
   handleImageChange = (event) => {
     const image = event.target.files[0];
-    console.log(image);
     const formData = new FormData();
     formData.append("newImage", image);
 
@@ -137,6 +140,7 @@ class Profile extends Component {
                   <EditIcon color="primary">Edit Profile Image</EditIcon>
                 </IconButton>
               </Tooltip>
+              <hr />
             </div>
             <div className="profile-details">
               <MuiLink
@@ -182,7 +186,7 @@ class Profile extends Component {
                 </Fragment>
               )}
             </div>
-            <Fragment className="bottom-buttons">
+            <Fragment>
               <EditProfile />
               <LogoutBtn />
             </Fragment>
@@ -229,6 +233,8 @@ const mapStateToProps = (state) => ({
 });
 
 Profile.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  uploadImage: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };

@@ -18,8 +18,8 @@ export class LogoutBtn extends Component {
   render() {
     return (
       <Button
-        className="button"
-        variant="contained"
+        style={{ width: "200px", margin: "0 auto" }}
+        variant="outlined"
         color="secondary"
         onClick={this.handleLogoutClick}
       >
