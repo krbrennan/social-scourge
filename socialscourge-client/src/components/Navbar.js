@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -12,13 +12,15 @@ import Button from "@material-ui/core/Button";
 
 import { logoutUser } from "../redux/actions/userActions";
 
+// Components
+import CreatePost from "./CreatePost.js";
+
 export class Navbar extends Component {
   constructor() {
     super();
   }
 
   handleLogoutClick = (event) => {
-    // event.preventDefault();
     this.props.logoutUser();
   };
 
@@ -41,9 +43,16 @@ export class Navbar extends Component {
               </Button>
 
               {authenticated ? (
-                <Button color="inherit" onClick={this.handleLogoutClick} to="/">
-                  Logout
-                </Button>
+                <Fragment>
+                  <Button
+                    color="inherit"
+                    onClick={this.handleLogoutClick}
+                    to="/"
+                  >
+                    Logout
+                  </Button>
+                  <CreatePost />
+                </Fragment>
               ) : (
                 <Button color="inherit" component={Link} to="login">
                   Login

@@ -43,7 +43,6 @@ const styles = {
   },
   button: {
     borderRadius: "0",
-    height: "200em",
   },
   profile: {
     textAlign: "center",
@@ -87,6 +86,11 @@ const styles = {
     display: "flex",
     // flexDirection: "row",
     padding: "2em",
+  },
+  editAndLogout: {
+    display: "flex",
+    flexDirection: "row",
+    margin: "0 auto",
   },
 };
 
@@ -135,7 +139,7 @@ class Profile extends Component {
                 hidden="hidden"
                 onChange={this.handleImageChange}
               />
-              <Tooltip title="Edit">
+              <Tooltip title="Edit Profile Image" placement="right">
                 <IconButton id="imageInput" onClick={this.handleEditPicture}>
                   <EditIcon color="primary">Edit Profile Image</EditIcon>
                 </IconButton>
@@ -187,8 +191,10 @@ class Profile extends Component {
               )}
             </div>
             <Fragment>
-              <EditProfile />
-              <LogoutBtn />
+              <div className={classes.editAndLogout}>
+                <EditProfile />
+                <LogoutBtn />
+              </div>
             </Fragment>
           </div>
         </Paper>

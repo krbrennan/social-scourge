@@ -15,11 +15,11 @@ import EditIcon from "@material-ui/icons/Edit";
 import { editProfile } from "../redux/actions/userActions";
 
 import { connect } from "react-redux";
-import { recomposeColor, Tooltip } from "@material-ui/core";
+import { Tooltip } from "@material-ui/core";
 
 const styles = {
-  ".button": {
-    borderRadius: "0 !important",
+  button: {
+    borderRadius: "0",
   },
 };
 
@@ -49,6 +49,7 @@ class EditProfile extends Component {
     const { credentials } = this.props;
     this.mapUserDetailsToState(credentials);
   }
+
   handleOpen = () => {
     this.setState({ open: true });
     this.mapUserDetailsToState(this.props.credentials);
@@ -73,8 +74,8 @@ class EditProfile extends Component {
     const { classes } = this.props;
     return (
       <Fragment>
-        <Tooltip title="Edit Profile Details" placement="top">
-          <IconButton onClick={this.handleOpen} className="button">
+        <Tooltip title="Edit Profile Details" placement="left">
+          <IconButton onClick={this.handleOpen} className={classes.button}>
             <EditIcon color="primary"></EditIcon>
           </IconButton>
         </Tooltip>

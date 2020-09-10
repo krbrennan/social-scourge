@@ -3,7 +3,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 
-import Button from "@material-ui/core/Button";
+// MUI
+import Tooltip from "@material-ui/core/Tooltip";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import IconButton from "@material-ui/core/IconButton";
 
 export class LogoutBtn extends Component {
   constructor() {
@@ -17,14 +20,11 @@ export class LogoutBtn extends Component {
 
   render() {
     return (
-      <Button
-        style={{ width: "200px", margin: "0 auto" }}
-        variant="outlined"
-        color="secondary"
-        onClick={this.handleLogoutClick}
-      >
-        Logout
-      </Button>
+      <Tooltip title="Logout" placement="right">
+        <IconButton id="imageInput" onClick={this.handleLogoutClick}>
+          <ExitToAppIcon color="primary">Logout</ExitToAppIcon>
+        </IconButton>
+      </Tooltip>
     );
   }
 }
