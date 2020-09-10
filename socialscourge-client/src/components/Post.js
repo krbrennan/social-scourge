@@ -81,9 +81,3 @@ Post.propTypes = {
 };
 
 export default withStyles(styles)(Post);
-
-// export default Post
-
-{
-  /* <p>{this.props.children}</p> */
-}

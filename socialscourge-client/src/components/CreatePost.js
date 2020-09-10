@@ -27,6 +27,14 @@ class CreatePost extends Component {
     errors: {},
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.UI.errors) {
+      this.setState({
+        errors: nextProps.UI.errors,
+      });
+    }
+  }
+
   handleOpen = () => {
     this.setState({
       open: true,
@@ -37,9 +45,9 @@ class CreatePost extends Component {
       open: false,
     });
   };
-  handleChange = (props) => {
+  handleChange = (event) => {
     this.setState({
-      [props.target.name]: props.target.value,
+      [event.target.name]: event.target.value,
     });
   };
   handleSubmit = (event) => {
@@ -66,14 +74,16 @@ class CreatePost extends Component {
           <DialogContent>
             <form onSubmit={this.handleSubmit}>
               <TextField
-                autoFocus
                 name="body"
-                id="CreatePost"
                 label="What's on your mind?"
                 fullWidth
+                multiline
+                rows="3"
                 type="text"
                 margin="dense"
                 onChange={this.handleChange}
+                error={errors.body ? true : false}
+                helperText={errors.body}
               />
               <Button type="submit" variant="contained" color="primary">
                 Submit

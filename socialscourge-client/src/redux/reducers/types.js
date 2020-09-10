@@ -10,3 +10,6 @@ export const CLEAR_ERRORS = "CLEAR_ERRORS";
 
 // Data Reducer Types
 export const CREATE_POST = "CREATE_POST";
+export const SET_POSTS = "SET_POSTS";
+export const LOADING_DATA = "LOADING_DATA";
+export const SET_POST = "SET_POST";

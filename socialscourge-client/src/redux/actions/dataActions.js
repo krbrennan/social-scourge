@@ -3,15 +3,23 @@ import {
   CLEAR_ERRORS,
   LOADING_UI,
   CREATE_POST,
+  SET_POSTS,
+  SET_POST,
+  LOADING_DATA,
 } from "../reducers/types";
 
 import axios from "axios";
 
-// export const getAllPosts = () => (dispatch) => {
-//     axios
-//         .get("/posts")
-//         .then
-// }
+export const getAllPosts = () => (dispatch) => {
+  dispatch({ type: LOADING_DATA });
+  axios
+    .get("/posts")
+    .then((res) => {
+      console.log(res.data);
+      dispatch({ type: SET_POSTS, payload: res.data });
+    })
+    .catch((err) => dispatch({ type: SET_POSTS, payload: [] }));
+};
 
 // Create a post
 export const createPost = (newPost) => (dispatch) => {
@@ -19,6 +27,7 @@ export const createPost = (newPost) => (dispatch) => {
   axios
     .post("/post", newPost)
     .then((res) => {
+      console.log(res.data);
       dispatch({ type: CREATE_POST, payload: res.data });
       dispatch(clearErrors());
       dispatch({ type: LOADING_UI });

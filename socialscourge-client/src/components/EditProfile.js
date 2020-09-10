@@ -74,7 +74,7 @@ class EditProfile extends Component {
     const { classes } = this.props;
     return (
       <Fragment>
-        <Tooltip title="Edit Profile Details" placement="left">
+        <Tooltip title="Edit Profile Details" placement="right">
           <IconButton onClick={this.handleOpen} className={classes.button}>
             <EditIcon color="primary"></EditIcon>
           </IconButton>

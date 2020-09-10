@@ -20,7 +20,7 @@ export class LogoutBtn extends Component {
 
   render() {
     return (
-      <Tooltip title="Logout" placement="right">
+      <Tooltip title="Logout" placement="left">
         <IconButton id="imageInput" onClick={this.handleLogoutClick}>
           <ExitToAppIcon color="primary">Logout</ExitToAppIcon>
         </IconButton>

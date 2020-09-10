@@ -90,7 +90,7 @@ const styles = {
   editAndLogout: {
     display: "flex",
     flexDirection: "row",
-    margin: "0 auto",
+    justifyContent: "space-between",
   },
 };
 

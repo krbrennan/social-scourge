@@ -12,7 +12,8 @@ exports.newPost = (req, res) => {
     createdAt: new Date().toISOString(),
     likeCount: req.body.likeCount,
     commentCount: req.body.commentCount,
-    imageUrl: req.user.imgUrl,
+    // imagUrl: req.user.imgUrl,
+    userImg: req.user.imgUrl,
     likeCount: 0,
     commentCount: 0,
   };
@@ -22,7 +23,8 @@ exports.newPost = (req, res) => {
     .then((doc) => {
       const responsePost = newPost;
       responsePost.postId = doc.id;
-      res.json({ message: `document ${doc.id} created successfully` });
+      // res.json({ message: `document ${doc.id} created successfully` });
+      res.json(responsePost);
     })
     .catch((err) => {
       res.status(500).json({ error: "something went terribly wrong" });
@@ -56,7 +58,7 @@ exports.getAllPosts = (req, res) => {
           commentCount: doc._fieldsProto.commentCount.integerValue,
         });
       });
-      return res.status(200).json(posts);
+      return res.json(posts);
     })
     .catch((err) => {
       console.error(err);
