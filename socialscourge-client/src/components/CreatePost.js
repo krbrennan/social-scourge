@@ -12,13 +12,18 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import AddIcon from "@material-ui/icons/Add";
 
 import { createPost } from "../redux/actions/dataActions";
 
 import { connect } from "react-redux";
 import { Tooltip } from "@material-ui/core";
 
-const styles = {};
+const styles = {
+  create: {
+    color: "white",
+  },
+};
 
 class CreatePost extends Component {
   state = {
@@ -63,7 +68,11 @@ class CreatePost extends Component {
     } = this.props;
     return (
       <Fragment>
-        <Button onClick={this.handleOpen}>Create new Post</Button>
+        <Tooltip title="Create Post" placement="bottom">
+          <Button onClick={this.handleOpen}>
+            <AddIcon className={classes.create} />
+          </Button>
+        </Tooltip>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}

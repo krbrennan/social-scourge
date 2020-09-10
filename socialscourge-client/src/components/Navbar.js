@@ -5,15 +5,29 @@ import { connect } from "react-redux";
 
 // Material-ui
 // import { AppBar, Button, Typography, Toolbar } from '@material-ui/core';
+import withStyles from "@material-ui/core/styles/withStyles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import HomeIcon from "@material-ui/icons/Home";
+import { Tooltip } from "@material-ui/core";
 
 import { logoutUser } from "../redux/actions/userActions";
 
 // Components
 import CreatePost from "./CreatePost.js";
+
+const styles = {
+  iconStyle: {
+    color: "white",
+  },
+  navFragment: {
+    display: "flex",
+    alignItems: "center",
+  },
+};
 
 export class Navbar extends Component {
   constructor() {
@@ -26,6 +40,7 @@ export class Navbar extends Component {
 
   render() {
     const {
+      classes,
       user: { authenticated },
     } = this.props;
     return (
@@ -37,30 +52,36 @@ export class Navbar extends Component {
           position="fixed"
         >
           <Toolbar className="nav-container">
-            <Typography variant="h6">
-              <Button color="inherit" component={Link} to="/">
-                Home
-              </Button>
+            <Typography className={classes.navFragment} variant="h6">
+              <Tooltip title="Home" placement="bottom">
+                <Button color="inherit" component={Link} to="/">
+                  <HomeIcon />
+                </Button>
+              </Tooltip>
 
               {authenticated ? (
                 <Fragment>
-                  <Button
-                    color="inherit"
-                    onClick={this.handleLogoutClick}
-                    to="/"
-                  >
-                    Logout
-                  </Button>
+                  <Tooltip title="Logout" placement="bottom">
+                    <Button
+                      color="inherit"
+                      onClick={this.handleLogoutClick}
+                      to="/"
+                    >
+                      <ExitToAppIcon />
+                    </Button>
+                  </Tooltip>
                   <CreatePost />
                 </Fragment>
               ) : (
-                <Button color="inherit" component={Link} to="login">
-                  Login
-                </Button>
+                <Fragment>
+                  <Button color="inherit" component={Link} to="login">
+                    Login
+                  </Button>
+                  <Button color="inherit" component={Link} to="/signup">
+                    Signup
+                  </Button>
+                </Fragment>
               )}
-              <Button color="inherit" component={Link} to="/signup">
-                Signup
-              </Button>
             </Typography>
           </Toolbar>
         </AppBar>
@@ -75,6 +96,9 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps, mapActionsToProps)(Navbar);
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withStyles(styles)(Navbar));
 
 // export default Navbar;
