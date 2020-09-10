@@ -3,16 +3,16 @@ const admin = require("../util/admin");
 const functions = require("firebase-functions");
 
 firebase = require("firebase");
+// userImg: req.user.imgUrl,
 
 exports.newPost = (req, res) => {
-  console.log(req.user);
+  // console.log(req.user);
   const newPost = {
     body: req.body.body,
     username: req.user.username,
     createdAt: new Date().toISOString(),
     likeCount: req.body.likeCount,
     commentCount: req.body.commentCount,
-    // imagUrl: req.user.imgUrl,
     userImg: req.user.imgUrl,
     likeCount: 0,
     commentCount: 0,
@@ -45,15 +45,16 @@ exports.getAllPosts = (req, res) => {
     .orderBy("createdAt", "desc")
     .get()
     .then((querySnapshot) => {
-      // console.log(querySnapshot._docs())
       let posts = [];
+      // console.log(querySnapshot);
       querySnapshot._docs().forEach((doc) => {
+        console.log(doc);
         posts.push({
           postId: doc.id,
           body: doc._fieldsProto.body.stringValue,
           username: doc._fieldsProto.username.stringValue,
           createdAt: doc._fieldsProto.createdAt.stringValue,
-          userImg: doc._fieldsProto.imageUrl.stringValue,
+          userImg: doc._fieldsProto.userImg.stringValue,
           likeCount: doc._fieldsProto.likeCount.integerValue,
           commentCount: doc._fieldsProto.commentCount.integerValue,
         });
@@ -62,6 +63,7 @@ exports.getAllPosts = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
+      res.status(500).json({ error: err.code });
     });
 };
 //

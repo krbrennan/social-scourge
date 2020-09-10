@@ -75,6 +75,7 @@ class CreatePost extends Component {
             <form onSubmit={this.handleSubmit}>
               <TextField
                 name="body"
+                autofocus
                 label="What's on your mind?"
                 fullWidth
                 multiline
