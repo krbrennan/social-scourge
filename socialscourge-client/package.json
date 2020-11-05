@@ -2,6 +2,10 @@
   "name": "socialscourge-client",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "npm": "6.14.4",
+    "node": "10.19.0"
+  },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -34,7 +38,7 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini alll"
     ],
     "development": [
       "last 1 chrome version",
