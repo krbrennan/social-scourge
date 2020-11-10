@@ -16,9 +16,14 @@ export const loginUser = (userData, history) => (dispatch) => {
   // console.log(userData);
   // send req to server and show errors, if successful then show errors
   axios
-    .post("/signin", userData)
+    // .post("/signin", userData)
+    .post("https://us-central1-social-scourge.cloudfunctions.net/api/signin", userData, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      } 
+    })
     .then((res) => {
-      console.log(res.data.token);
+      // console.log(res.data.token);
       setAuthorizationHeader(res.data.token);
       dispatch(getUserData());
       dispatch({
