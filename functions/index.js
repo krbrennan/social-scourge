@@ -26,6 +26,9 @@ const { admin, db } = require("./util/admin.js");
 const firebase = require("firebase");
 const app = require("express")();
 
+const cors = require('cors');
+app.use(cors());
+
 const serviceAccount = require("./key/admin.json");
 
 // middleware authorization

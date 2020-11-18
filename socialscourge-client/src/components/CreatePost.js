@@ -32,13 +32,14 @@ class CreatePost extends Component {
     errors: {},
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.UI.errors) {
-      this.setState({
-        errors: nextProps.UI.errors,
-      });
-    }
-  }
+  // uncomment
+  // UNSAFE_componentWillReceiveProps(nextProps) {
+  //   if (nextProps.UI.errors) {
+  //     this.setState({
+  //       errors: nextProps.UI.errors,
+  //     });
+  //   }
+  // }
 
   handleOpen = () => {
     this.setState({

@@ -13,7 +13,7 @@ import axios from "axios";
 export const getAllPosts = () => (dispatch) => {
   dispatch({ type: LOADING_DATA });
   axios
-    .get("/posts")
+    .get("https://us-central1-social-scourge.cloudfunctions.net/api/posts")
     .then((res) => {
       console.log(res.data);
       dispatch({ type: SET_POSTS, payload: res.data });
@@ -25,7 +25,7 @@ export const getAllPosts = () => (dispatch) => {
 export const createPost = (newPost) => (dispatch) => {
   dispatch({ type: LOADING_UI });
   axios
-    .post("/post", newPost)
+    .post("https://us-central1-social-scourge.cloudfunctions.net/api/post", newPost)
     .then((res) => {
       console.log(res.data);
       dispatch({ type: CREATE_POST, payload: res.data });

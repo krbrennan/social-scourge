@@ -52,6 +52,7 @@ class login extends Component {
     });
   };
 
+//uncomment 
   componentWillReceiveProps(nextProps) {
     if (nextProps.UI.errors) {
       this.setState({ errors: nextProps.UI.errors });

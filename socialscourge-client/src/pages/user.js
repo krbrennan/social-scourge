@@ -16,6 +16,7 @@ class user extends Component {
     profile: null,
     postIdParam: null,
   };
+  // uncomment
   componentDidMount() {
     const username = this.props.match.params.username;
     const postId = this.props.match.params.postId;

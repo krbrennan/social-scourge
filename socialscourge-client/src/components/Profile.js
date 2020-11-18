@@ -159,7 +159,7 @@ class Profile extends Component {
               {bio && (
                 <Typography variant="body2">
                   {bio}
-                  <hr className={classes.hr} />
+                  {/* <hr className={classes.hr} /> */}
                 </Typography>
               )}
               <CalendarTodayIcon color="primary" />{" "}
@@ -226,7 +226,7 @@ class Profile extends Component {
         </Paper>
       )
     ) : (
-      <p>Loading</p>
+      <span>Loading</span>
     );
     return profileMarkup;
   }

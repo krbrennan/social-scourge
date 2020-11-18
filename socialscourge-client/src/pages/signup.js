@@ -57,7 +57,6 @@ const styles = {
 
 export class signup extends Component {
   constructor(props) {
-    super(props);
     this.state = {
       email: "",
       password: "",
@@ -77,12 +76,12 @@ export class signup extends Component {
       [props.target.name]: props.target.value,
     });
   };
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.UI.errors) {
-      this.setState({ errors: nextProps.UI.errors });
-    }
-  }
+// uncomment
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.UI.errors) {
+  //     this.setState({ errors: nextProps.UI.errors });
+  //   }
+  // }
 
   handleSubmit = (event) => {
     event.preventDefault();
